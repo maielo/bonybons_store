@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  redis-bonybons:
+    image: redis:latest
+    container_name: redis-bonybons
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-bonybons-data:/data
+    command: redis-server --appendonly yes --port 6379
+    networks:
+      - app-network
+
+  postgres-bonybons:
+    image: postgres:latest
+    container_name: postgres-bonybons
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - postgres-bonybons-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+volumes:
+  redis-bonybons-data:
+  postgres-bonybons-data:
+
+networks:
+  app-network:
+    driver: bridge
